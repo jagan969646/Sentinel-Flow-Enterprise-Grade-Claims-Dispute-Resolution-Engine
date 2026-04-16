@@ -4,83 +4,95 @@ import time
 import pandas as pd
 from datetime import datetime
 
-from automation.python.anomaly_detector import detect_anomalies
-
 # --- SENIOR ARCHITECTURE: DYNAMIC PATH INJECTION ---
-# Ensures the script can resolve local dependencies regardless of the 
-# execution environment or folder depth.
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# We define the root directory first to ensure absolute stability.
+# This prevents 'blank' screens caused by path resolution failures.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 # Professional Import Handling
 try:
-    from automation import anomaly_detector
-except ImportError as e:
-    print(f"❌ Dependency Error: {e}")
-    print(f"Check that 'anomaly_detector.py' exists in: {current_dir}")
-    input("\nPress Enter to exit...")
-    sys.exit(1)
+    # Based on your file list, anomaly_detector.py is in the same folder as app.py
+    from anomaly_detector import detect_anomalies
+except ImportError:
+    try:
+        # Fallback if you move it to a subfolder later
+        from automation.python.anomaly_detector import detect_anomalies
+    except ImportError as e:
+        print(f"❌ CRITICAL CONFIGURATION ERROR: {e}")
+        print(f"System expected dependency at: {BASE_DIR}")
+        input("\nPress Enter to exit...")
+        sys.exit(1)
 
-# --- BUSINESS LOGIC CONSTANTS (Flutter JD Alignment) ---
-OPEX_SAVINGS_PER_TX = 1.25  # Strategic ROI Metric per record
+# --- STRATEGIC ROI METRICS (JD Alignment: 'Automation Benefits') ---
+# These values position you as a BA who understands the 'Flutter Edge'
+GBP_SAVINGS_PER_TX = 1.25 
+ERROR_THRESHOLD_PERCENT = 0.05 
 
 def generate_stakeholder_report(start_time):
     """
     JD Requirement: 'Delivers performance reports for stakeholders'
-    Uses absolute paths to ensure the report renders correctly.
+    Calculates operational efficiency and risk.
     """
     try:
-        # Resolve paths relative to where app.py lives
-        input_path = os.path.join(current_dir, "data", "input", "transactions.xlsx")
-        output_path = os.path.join(current_dir, "data", "output", "flagged_transactions.xlsx")
+        # Explicit Absolute Paths to ensure the report ALWAYS renders
+        input_path = os.path.join(BASE_DIR, "data", "input", "transactions.xlsx")
+        output_path = os.path.join(BASE_DIR, "data", "output", "flagged_transactions.xlsx")
 
         if not os.path.exists(input_path):
-            print(f"⚠️  Report Skipped: Input data not found at {input_path}")
+            print(f"⚠️  METRICS DELAYED: Source file not found at {input_path}")
             return
 
+        # Use engine='openpyxl' to avoid common format errors
         input_df = pd.read_excel(input_path, engine="openpyxl")
+        total_vol = len(input_df)
         
-        # Verify if detector created an output
-        anomalies = 0
+        flagged_vol = 0
         if os.path.exists(output_path):
             flagged_df = pd.read_excel(output_path, engine="openpyxl")
-            anomalies = len(flagged_df)
+            flagged_vol = len(flagged_df)
 
-        total = len(input_df)
-        savings = total * OPEX_SAVINGS_PER_TX
+        roi_savings = total_vol * GBP_SAVINGS_PER_TX
+        integrity_rate = ((total_vol - flagged_vol) / total_vol * 100) if total_vol > 0 else 0
 
-        # Render the Executive Dashboard
+        # RENDER EXECUTIVE DASHBOARD
         print("\n" + "█"*65)
-        print(f" SENTINEL CORE v2.3 | FINANCIAL INTEGRITY EXECUTIVE REPORT")
+        print(f" SENTINEL CORE v2.4 | SETTLEMENT INTEGRITY EXECUTIVE REPORT")
         print("█"*65)
-        print(f" STATUS:            SUCCESSFUL")
-        print(f" BATCH VOLUME:      {total} Transactions")
-        print(f" ANOMALIES FOUND:   {anomalies} (Flagged for RPA)")
-        print(f" ESTIMATED ROI:     £{savings:,.2f}")
+        print(f" BATCH STATUS:      COMPLETED")
+        print(f" THROUGHPUT:        {total_vol} Transactions")
+        print(f" INTEGRITY RATE:    {integrity_rate:.2f}%")
+        print(f" ANOMALIES FOUND:   {flagged_vol} (Auto-Flagged for RPA)")
+        print(f" OPERATIONAL ROI:   £{roi_savings:,.2f}")
         print(f" ENGINE LATENCY:    {time.time() - start_time:.4f}s")
-        print("█"*65 + "\n")
+        print("█"*65)
+
+        # JD Requirement: 'Perform risk and issue management'
+        if integrity_rate < 95:
+            print(f"⚠️  RISK ALERT: Batch integrity ({integrity_rate:.2f}%) is below SLA.")
+            print("   Escalating to Finance Lead for manual verification.")
         
     except Exception as e:
-        print(f"⚠️  Metrics generation failed: {e}")
+        print(f"⚠️  BA Metric Generation Interrupted: {e}")
 
 def main():
     start_time = time.time()
-    print(f"--- [INITIALIZING RECONCILIATION ENGINE | {datetime.now().strftime('%H:%M:%S')}] ---")
+    print(f"--- [INITIALIZING SENTINEL ENGINE | {datetime.now().strftime('%H:%M:%S')}] ---")
+    print("Connecting to Data layer...")
 
     try:
-        # 1. Execute Core Logic
+        # 1. TRIGGER CORE ENGINE
         detect_anomalies()
 
-        # 2. Generate BA Reporting
+        # 2. GENERATE STRATEGIC REPORT
         generate_stakeholder_report(start_time)
 
-        print("--- Process Complete ---")
-        # CRITICAL: Keeps terminal open so you can see the results
-        input("\nPROMPT: Execution finished. Press Enter to close dashboard...") 
+        print("\n--- Process Cycle Complete ---")
+        input("PROMPT: Execution finished. Press Enter to close dashboard...") 
 
     except Exception as e:
-        print(f"❌ System Exception: {str(e)}")
+        print(f"❌ SYSTEM EXCEPTION: {str(e)}")
         input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
