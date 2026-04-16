@@ -1,0 +1,34 @@
+{
+  "name": "Settlement_Reconciliation_Bot",
+  "projectId": "b8f4c7d2-automation-settlement-001",
+  "description": "Automated settlement reconciliation bot integrated with Python anomaly detection system. Processes flagged transactions, updates records, and sends alerts.",
+  "main": "Settlement_Reconciliation_Bot.xaml",
+  "dependencies": {
+    "UiPath.Excel.Activities": "[2.20.0]",
+    "UiPath.System.Activities": "[23.10.0]",
+    "UiPath.UIAutomation.Activities": "[23.10.0]",
+    "UiPath.Mail.Activities": "[1.20.0]"
+  },
+  "webServices": [],
+  "entitiesStores": [],
+  "schemaVersion": "4.0",
+  "studioVersion": "23.10.0.0",
+  "projectVersion": "1.0.0",
+  "runtimeOptions": {
+    "autoDispose": false,
+    "isPausable": true,
+    "requiresUserInteraction": true,
+    "supportsPersistence": false,
+    "excludedLoggedData": [
+      "Private:*",
+      "*password*"
+    ]
+  },
+  "designOptions": {
+    "outputType": "Process",
+    "libraryOptions": {
+      "includeOriginalXaml": false
+    }
+  },
+  "expressionLanguage": "VisualBasic"
+}

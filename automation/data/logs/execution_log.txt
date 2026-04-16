@@ -1,0 +1,10 @@
+2026-04-16 20:56:27.925735 - Process started
+2026-04-16 20:56:27.929103 - Error: Excel file format cannot be determined, you must specify an engine manually.
+2026-04-16 20:56:47.238587 - Process started
+2026-04-16 20:56:47.241590 - Error: Excel file format cannot be determined, you must specify an engine manually.
+2026-04-16 20:57:50.308373 - Process started
+2026-04-16 20:57:50.863846 - Error: File is not a zip file
+2026-04-16 21:00:15.463622 - Process started
+2026-04-16 21:00:15.846969 - Total records processed: 4
+2026-04-16 21:00:15.846969 - Mismatches found: 2
+2026-04-16 21:00:15.847968 - Process completed successfully
